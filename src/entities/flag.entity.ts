@@ -25,6 +25,10 @@ import {
     @Column()
     @Field()
     emoji: string;
+
+    @Column()
+    @Field()
+    continent: string;
   }
 
 @InputType()
@@ -35,4 +39,6 @@ export class CreateFlagInput {
   name: string;
   @Field()
   emoji: string;
+  @Field()
+  continent: string;
 }
