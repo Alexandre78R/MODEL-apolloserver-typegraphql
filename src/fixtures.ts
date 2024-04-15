@@ -6,8 +6,13 @@ import fakeFlags from "./fakeData/fakeFlags";
 async function migrate() {
     await db.initialize();
 
-    //Migrate Flag
+    // Supprimer toutes les entrées de la table flags
     await db.getRepository(Flag).clear();
+
+    // Réinitialiser l'auto-incrémentation de l'ID (Que sur SQLITE)
+    await db.query('DELETE FROM sqlite_sequence WHERE name="flag"');
+
+    //Insert new flags
     const userRepository = db.getRepository(Flag);
     await userRepository.save(fakeFlags);
 

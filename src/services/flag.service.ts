@@ -1,5 +1,5 @@
 import { In, Repository } from "typeorm";
-import { Flag, CreateFlagInput} from "../entities/flag.entity";
+import { Flag, CreateFlagInput, UpdateFlagInput } from "../entities/flag.entity";
 import datasource from "../libs/db";
 import { validate } from "class-validator";
 
@@ -14,6 +14,7 @@ export default class FlagService {
   }
 
   async findById(id: number) {
+    console.log("toto")
     return await this.db.findOne({ where: { id } });
   }
 
@@ -45,5 +46,18 @@ export default class FlagService {
         throw new Error("The flag does not exist");
     }
     return await this.db.remove(flagToDelete);
+  }
+
+  async update(id: number, data : Omit<UpdateFlagInput, "id">) {
+    console.log(id)
+    const flagToUpdate = await this.findById(id);
+    console.log(flagToUpdate)
+    if (!flagToUpdate) {
+        throw new Error("The flag does not exist");
+    }
+    const flagToSave = this.db.merge(flagToUpdate, {
+        ...data,
+      });
+    return await this.db.save(flagToSave);
   }
 }

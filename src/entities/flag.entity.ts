@@ -41,3 +41,17 @@ export class CreateFlagInput {
   @Field()
   continent: string;
 }
+
+@InputType()
+export class UpdateFlagInput {
+  @Field(() => ID)
+  id: number;
+  @Field()
+  code: string;
+  @Field()
+  name: string;
+  @Field()
+  emoji: string;
+  @Field()
+  continent: string;
+}
