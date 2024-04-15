@@ -4,6 +4,5 @@ export default new DataSource({
     database: "flags.sqlite",
     entities: ["src/entities/*.ts"],
     synchronize: true,
-    // logging: ["query","error"],
     logging: true,
   });
