@@ -4,25 +4,26 @@ import {
     PrimaryGeneratedColumn,
     Column,
   } from "typeorm";
-  import { ObjectType, Field , InputType, Float } from "type-graphql";
+  import { ObjectType, Field, ID, InputType, Float } from "type-graphql";
   import { Length } from "class-validator";
   
   @ObjectType()
   @Entity()
   export class Flag extends BaseEntity {
+    @Field(() => ID)
     @PrimaryGeneratedColumn()
     id: number;
   
-    @Column({ length: 2 })
+    @Column({ length: 2, unique: true })
     @Field()
     @Length(2, 2, { message: "The flag code is made up of 2 letters only" })
     code: string;
   
-    @Column()
+    @Column({ unique: true })
     @Field()
     name: string;
   
-    @Column()
+    @Column({ unique: true })
     @Field()
     emoji: string;
 

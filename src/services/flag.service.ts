@@ -13,20 +13,37 @@ export default class FlagService {
     return await this.db.find();
   }
 
+  async findById(id: number) {
+    return await this.db.findOne({ where: { id } });
+  }
 
-  async find(id: number) {
-    return []
+  async findByCode(code: string) {
+    return await this.db.findOne({ where: { code } });
+  }
+
+  async findListByContinent(continent: string) {
+    return await this.db.find({ where: { continent } });
   }
 
   async create(data: CreateFlagInput) {
-    const newFlag = this.db.create(data);
-    return await this.db.save(newFlag);
+    try {
+        const newFlag = this.db.create(data);
+        return await this.db.save(newFlag);
+    } catch (err : any) {
+        if (err.driverError.errno === 19) {
+            throw new Error("Unable to create the flag, it already exists in our database");
+        } else {
+            throw new Error("Server error please check again later");
+        }
+
+    }
   }
 
   async delete(id: number) {
-
+    const flagToDelete = await this.findById(id);
+    if (!flagToDelete) {
+        throw new Error("The flag does not exist");
+    }
+    return await this.db.remove(flagToDelete);
   }
-
-//   async update(id: number, data) {
-//   }
 }
