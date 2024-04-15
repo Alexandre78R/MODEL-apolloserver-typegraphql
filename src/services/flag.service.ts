@@ -1,5 +1,5 @@
 import { In, Repository } from "typeorm";
-import { Flag } from "../entities/flag.entity";
+import { Flag, CreateFlagInput} from "../entities/flag.entity";
 import datasource from "../libs/db";
 import { validate } from "class-validator";
 
@@ -10,7 +10,7 @@ export default class FlagService {
   }
 
   async list() {
-    return []
+    return await this.db.find();
   }
 
 
@@ -18,8 +18,10 @@ export default class FlagService {
     return []
   }
 
-//   async create(data: ) {
-//   }
+  async create(data: CreateFlagInput) {
+    const newFlag = this.db.create(data);
+    return await this.db.save(newFlag);
+  }
 
   async delete(id: number) {
 

@@ -4,7 +4,7 @@ import {
     PrimaryGeneratedColumn,
     Column,
   } from "typeorm";
-  import { ObjectType, Field } from "type-graphql";
+  import { ObjectType, Field , InputType, Float } from "type-graphql";
   import { Length } from "class-validator";
   
   @ObjectType()
@@ -14,6 +14,7 @@ import {
     id: number;
   
     @Column({ length: 2 })
+    @Field()
     @Length(2, 2, { message: "The flag code is made up of 2 letters only" })
     code: string;
   
@@ -25,3 +26,13 @@ import {
     @Field()
     emoji: string;
   }
+
+@InputType()
+export class CreateFlagInput {
+  @Field()
+  code: string;
+  @Field()
+  name: string;
+  @Field()
+  emoji: string;
+}
