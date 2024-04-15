@@ -1,6 +1,6 @@
 import { Arg, Mutation, Query, Resolver } from "type-graphql";
 import FlagService from "../services/flag.service";
-import { Flag, CreateFlagInput  } from "../entities/flag.entity";
+import { Flag, CreateFlagInput, UpdateFlagInput} from "../entities/flag.entity";
 
 @Resolver()
 export class FlagResolver {
@@ -32,5 +32,11 @@ export class FlagResolver {
   @Mutation(() => Flag)
   async deleteFlag(@Arg("id") id: string) {
     return await new FlagService().delete(+id);
+  }
+
+  @Mutation(() => Flag)
+  async updateFlag(@Arg("data") data: UpdateFlagInput) {
+    const { id, ...outherData } = data;
+    return await new FlagService().update(+id, outherData);
   }
 }
