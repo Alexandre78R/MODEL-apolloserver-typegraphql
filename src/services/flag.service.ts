@@ -30,11 +30,15 @@ export default class FlagService {
         const newFlag = this.db.create(data);
         return await this.db.save(newFlag);
     } catch (err : any) {
-        if (err.driverError.errno === 19) {
-            throw new Error("Unable to create the flag, it already exists in our database");
-        } else {
-            throw new Error("Server error please check again later");
-        }
+      let errorMessage = err.sqlMessage || err.message;
+      if (err.code === 'SQLITE_CONSTRAINT' && errorMessage.includes('CHECK constraint failed:')) {
+        errorMessage = "Please choose between 7 continents: Asia | Africa | North America | South America | Antarctica | Oceania | Europe";
+      } else if (err.code === 'SQLITE_CONSTRAINT' && errorMessage.includes('UNIQUE constraint failed:')) {
+        errorMessage = "Unable to create the flag, it already exists in our database";
+      } else {
+        errorMessage = "Server error please check again later";
+      }
+      throw new Error(errorMessage);
     }
   }
 
@@ -57,11 +61,15 @@ export default class FlagService {
           });
         return await this.db.save(flagToSave);
     } catch (err: any) {
-        if (err.driverError.errno === 19) {
-            throw new Error("Unable to create the flag, it already exists in our database");
-        } else {
-            throw new Error("Server error please check again later");
-        }
+      let errorMessage = err.sqlMessage || err.message;
+      if (err.code === 'SQLITE_CONSTRAINT' && errorMessage.includes('CHECK constraint failed:')) {
+        errorMessage = "Please choose between 7 continents: Asia | Africa | North America | South America | Antarctica | Oceania | Europe";
+      } else if (err.code === 'SQLITE_CONSTRAINT' && errorMessage.includes('UNIQUE constraint failed:')) {
+        errorMessage = "Unable to create the flag, it already exists in our database";
+      } else {
+        errorMessage = "Server error please check again later";
+      }
+      throw new Error(errorMessage);
     }
   }
 }
