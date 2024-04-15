@@ -5,7 +5,6 @@ import {
     Column,
   } from "typeorm";
   import { ObjectType, Field, ID, InputType, Float } from "type-graphql";
-  import { Length } from "class-validator";
   
   @ObjectType()
   @Entity()
@@ -16,7 +15,6 @@ import {
   
     @Column({ length: 2, unique: true })
     @Field()
-    @Length(2, 2, { message: "The flag code is made up of 2 letters only" })
     code: string;
   
     @Column({ unique: true })
