@@ -14,7 +14,6 @@ export default class FlagService {
   }
 
   async findById(id: number) {
-    console.log("toto")
     return await this.db.findOne({ where: { id } });
   }
 
@@ -36,7 +35,6 @@ export default class FlagService {
         } else {
             throw new Error("Server error please check again later");
         }
-
     }
   }
 
@@ -49,15 +47,21 @@ export default class FlagService {
   }
 
   async update(id: number, data : Omit<UpdateFlagInput, "id">) {
-    console.log(id)
     const flagToUpdate = await this.findById(id);
-    console.log(flagToUpdate)
     if (!flagToUpdate) {
         throw new Error("The flag does not exist");
     }
-    const flagToSave = this.db.merge(flagToUpdate, {
-        ...data,
-      });
-    return await this.db.save(flagToSave);
+    try {
+        const flagToSave = this.db.merge(flagToUpdate, {
+            ...data,
+          });
+        return await this.db.save(flagToSave);
+    } catch (err: any) {
+        if (err.driverError.errno === 19) {
+            throw new Error("Unable to create the flag, it already exists in our database");
+        } else {
+            throw new Error("Server error please check again later");
+        }
+    }
   }
 }
