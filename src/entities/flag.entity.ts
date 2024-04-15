@@ -5,6 +5,8 @@ import {
     Column,
   } from "typeorm";
   import { ObjectType, Field, ID, InputType, Float } from "type-graphql";
+
+  export type Continent = "Asia" | "Africa" | "North America" | "South America" | "Antarctica" | "Oceania" | "Europe";
   
   @ObjectType()
   @Entity()
@@ -25,7 +27,7 @@ import {
     @Field()
     emoji: string;
 
-    @Column()
+    @Column({ enum: ["Asia", "Africa", "North America", "South America", "Antarctica", "Oceania", "Europe"], })
     @Field()
     continent: string;
   }
@@ -46,12 +48,12 @@ export class CreateFlagInput {
 export class UpdateFlagInput {
   @Field(() => ID)
   id: number;
-  @Field()
+  @Field({ nullable: true })
   code: string;
-  @Field()
+  @Field({ nullable: true })
   name: string;
-  @Field()
+  @Field({ nullable: true })
   emoji: string;
-  @Field()
+  @Field({ nullable: true })
   continent: string;
 }
